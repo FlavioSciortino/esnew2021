@@ -1,0 +1,75 @@
+#include<iostream>
+using namespace std;
+#ifndef CODA_H
+#define CODA_H
+template <typename T>
+class nodo {
+	nodo<T> * next;
+	nodo<T> * prev;
+	T val;
+	template <typename U>
+	friend class coda;
+public:
+	nodo(T val) : val(val) {next = nullptr; prev = nullptr; }
+	nodo<T> * getNext() {return this->next; }
+	nodo<T> * getPrev() {return this->prev; }
+	friend ostream &operator<<(ostream &os, nodo<T> & n) {
+		return os << "val = " << n.val << endl;
+	}
+};
+
+
+template <typename T>
+class coda {
+	nodo<T> * head;
+	nodo<T> * tail;
+	int size = 0;
+public:
+	coda() {head = nullptr; tail = nullptr; }
+	nodo<T> * getHead() {return this->head; }
+	nodo<T> * getTail() {return this->tail; }
+	bool isEmpty() {return head == nullptr && tail == nullptr; }
+	void enqueue(T val) {
+		if(isEmpty()) {
+			head = new nodo<T> (val);
+			tail = head;
+			return;
+		}
+
+		nodo<T> * toInsert = new nodo<T> (val);
+		toInsert->prev = tail;
+		tail->next = toInsert;
+		tail = toInsert;
+		return;
+	}
+
+	nodo<T> * dequeue() {
+		if(isEmpty()) {
+			cout << " empty..." << endl;
+		}
+
+		nodo<T> * tmp = head;
+		head = head->next;
+		return tmp;
+	}
+
+
+
+	
+
+	friend ostream &operator<<(ostream &os, coda<T> & c) {
+		if(c.isEmpty()) {
+			os << "empty..." << endl;
+		}
+
+		nodo<T> * ptr = c.head;
+		while(ptr) {
+			os << *ptr << endl;
+			ptr = ptr->getNext();
+		}
+		return os;
+	}
+};
+#endif
+
+
